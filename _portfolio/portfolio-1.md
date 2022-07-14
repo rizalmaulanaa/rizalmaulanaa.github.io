@@ -5,4 +5,4 @@ excerpt: "Code for paper titled Robustness of Probabilistic U-Net for Automated 
 collection: portfolio
 ---
 
-This is provisional codes for a conference paper titled "Robustness of Probabilistic U-Net for Automated Segmentation of White Matter Hyperintensity in Different Datasets of Brain MRI".
+This is provisional codes for a conference paper titled "Robustness of Probabilistic U-Net for Automated Segmentation of White Matter Hyperintensity in Different Datasets of Brain MRI". To see the code you can access [here](https://github.com/rizalmaulanaa/Robustness_of_Prob_U_Net).

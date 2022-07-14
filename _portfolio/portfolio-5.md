@@ -5,4 +5,4 @@ excerpt: "Topic extraction on news dataset"
 collection: portfolio
 ---
 
-Topic Extraction using Clustering Large Applications (CLARA)
+Topic Extraction using Clustering Large Applications (CLARA). To see the code you can access [here](https://github.com/rizalmaulanaa/Python-Scripts/tree/master/Topic%20Extraction).
