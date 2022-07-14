@@ -122,7 +122,6 @@ include:
   - .htaccess
   - _pages
   - files
-  - profile.png
 exclude:
   - "*.sublime-project"
   - "*.sublime-workspace"
@@ -147,6 +146,7 @@ exclude:
   - package.json
   - tmp
   - vendor
+  - profile.png
 keep_files:
   - .git
   - .svn
