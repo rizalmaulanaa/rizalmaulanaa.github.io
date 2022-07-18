@@ -60,7 +60,7 @@ Project
 
 Download CV
 ======
-You can download my CV [here](https://github.com/rizalmaulanaa/rizalmaulanaa.github.io/tree/master/files/CV_Rizal_Maulana)
+You can download my CV [here](https://github.com/rizalmaulanaa/rizalmaulanaa.github.io/blob/master/files/CV_Rizal_Maulana.pdf)
 
 <!-- Teaching
 ======
