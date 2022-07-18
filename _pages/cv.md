@@ -58,6 +58,10 @@ Project
 * Create Customer Segmentation from IndiHome customer with KMeans algorithm.
 * Develop a web base ticket marketplace using CI framework.
 
+Download CV
+======
+You can download my CV [here](https://github.com/rizalmaulanaa/rizalmaulanaa.github.io/tree/master/files/CV_Rizal_Maulana)
+
 <!-- Teaching
 ======
   <ul>{% for post in site.teaching %}
