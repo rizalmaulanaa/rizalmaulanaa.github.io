@@ -86,7 +86,7 @@ author:
   location         : "Bandung, Indonesia"
   employer         :
   pubmed           :
-  googlescholar    :
+  googlescholar    : "https://scholar.google.com/citations?user=Q9M9Y8QAAAAJ&hl=id"
   email            : "rizal.0951@gmail.com"
   researchgate     : "https://www.researchgate.net/profile/Rizal-Maulana-6" # example: "https://www.researchgate.net/profile/yourprofile"
   uri              :
@@ -103,7 +103,7 @@ author:
   impactstory      : #"https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
   lastfm           :
   linkedin         : "rizal-maulana-0951"
-  orcid            :
+  orcid            : "https://orcid.org/0000-0002-5528-1060"
   pinterest        :
   soundcloud       :
   stackoverflow    : # http://stackoverflow.com/users/123456/username
