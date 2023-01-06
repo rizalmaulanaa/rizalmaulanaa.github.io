@@ -16,8 +16,10 @@ Education
 
 Experience
 ======
-* Legal Data Scientist - Legal Analytics, Telkom Indonesia, Sep 2022 - Present
+* Data Engineer - Legal Analytics, Telkom Indonesia, Sep 2022 - Jan 2023
   * Crawling Indonesian news from various sites.
+  * Letter extraction, ID card extraction, and TOR extraction.
+  * Crawling Instagram.
 
 * Assitant of Advance Machine Learning – Fasilkom, Universitas Indonesia, Feb 2021 - June 2022
   * Assistant of Advance Machine Learning. Teaching students to understand basic Python and Deep Learning using library TensorFlow.
