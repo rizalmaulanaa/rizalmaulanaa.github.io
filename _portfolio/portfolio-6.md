@@ -1,8 +1,8 @@
 ---
-title: "malangmusicfestival"
+title: "Topic Extraction using Clustering Large Applications (CLARA)"
 # excerpt: "Short description of portfolio item number 1<br/><img src='/images/500x300.png'>"
-excerpt: "Ticket marketplace using PHP and HTML"
+excerpt: "Topic extraction on news dataset"
 collection: portfolio
 ---
 
-Ticket marketplace using PHP and HTML. To see the code you can access [here](https://github.com/rizalmaulanaa/malangmusicfestival).
+Topic Extraction using Clustering Large Applications (CLARA). To see the code you can access [here](https://github.com/rizalmaulanaa/Python-Scripts/tree/master/Topic%20Extraction).

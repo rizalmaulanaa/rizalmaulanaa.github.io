@@ -1,8 +1,8 @@
 ---
-title: "Dilated Residual U-Net"
+title: "Robustness of Probabilistic U Net"
 # excerpt: "Short description of portfolio item number 1<br/><img src='/images/500x300.png'>"
-excerpt: "Tree detection using Dilated Residual U-Net"
+excerpt: "Code for paper titled Robustness of Probabilistic U-Net for Automated Segmentation of White Matter Hyperintensity in Different Datasets of Brain MRI"
 collection: portfolio
 ---
 
-The model mostly the same as Deep Residual U-Net, but on the bottleneck we added Dilated Block from Dilated LinkNet. The usage of Residual U-Net are for minimize the information loss on segmentation and Dilated Block are for bigger receptive field with minimum weights. To see the code you can access [here](https://github.com/rizalmaulanaa/Dilated-Residual-U-Net).
+This is provisional codes for a conference paper titled "Robustness of Probabilistic U-Net for Automated Segmentation of White Matter Hyperintensity in Different Datasets of Brain MRI". To see the code you can access [here](https://github.com/rizalmaulanaa/Robustness_of_Prob_U_Net).

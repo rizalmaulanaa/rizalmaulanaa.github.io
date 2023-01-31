@@ -1,8 +1,8 @@
 ---
-title: "KiU-Net"
+title: "Dilated Residual U-Net"
 # excerpt: "Short description of portfolio item number 1<br/><img src='/images/500x300.png'>"
-excerpt: "Model KiU-Net on TensorFlow"
+excerpt: "Tree detection using Dilated Residual U-Net"
 collection: portfolio
 ---
 
-This repository is TensorFlow version of [KiU-Net-pytorch](https://github.com/jeya-maria-jose/KiU-Net-pytorch) repository. Please check the original paper for more information about the architecture "[KiU-Net: Towards Accurate Segmentation of Biomedical Images using Over-complete Representations](https://arxiv.org/abs/2006.04878)". To see the code you can access [here](https://github.com/rizalmaulanaa/KiU-Net-TF).
+The model mostly the same as Deep Residual U-Net, but on the bottleneck we added Dilated Block from Dilated LinkNet. The usage of Residual U-Net are for minimize the information loss on segmentation and Dilated Block are for bigger receptive field with minimum weights. To see the code you can access [here](https://github.com/rizalmaulanaa/Dilated-Residual-U-Net).

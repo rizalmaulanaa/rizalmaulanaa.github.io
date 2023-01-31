@@ -1,8 +1,8 @@
 ---
-title: "Robustness of Probabilistic U Net"
+title: "Probabilistic Multi-Compound Transformer (Probabilistic MCTrans)"
 # excerpt: "Short description of portfolio item number 1<br/><img src='/images/500x300.png'>"
-excerpt: "Code for paper titled Robustness of Probabilistic U-Net for Automated Segmentation of White Matter Hyperintensity in Different Datasets of Brain MRI"
+excerpt: "Code for Probabilistic Multi-Compound Transformer (Probabilistic MCTrans)"
 collection: portfolio
 ---
 
-This is provisional codes for a conference paper titled "Robustness of Probabilistic U-Net for Automated Segmentation of White Matter Hyperintensity in Different Datasets of Brain MRI". To see the code you can access [here](https://github.com/rizalmaulanaa/Robustness_of_Prob_U_Net).
+This code are modified and combine code from [Probabilistic-Unet-Pytorch](https://github.com/stefanknegt/Probabilistic-Unet-Pytorch) and [MCTrans](https://github.com/JiYuanFeng/MCTrans). Basically this code add a probabilistic model from Probabilistic U-Net into transformer-based model MCTrans. In previous study, model MCTrans can solved long-range dependencies problem and model Probabilistic U-Net can capture ambiguity in biomedical image. For installation, you can check [MCTrans](https://github.com/JiYuanFeng/MCTrans) repository.

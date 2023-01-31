@@ -56,6 +56,7 @@ Talks
 
 Project
 ======
+* Automatic Segmentation of White Matter Hyperintensities using Probabilistic MCTrans.
 * Tree Detection from Aerial Image using Dilated Residual U-Net.
 * Clustering Indonesian News Document using Seed-guided Deep Document Clustering.
 * Automatic Segmentation of White Matter Hyperintensities using Attention U-Net++.
