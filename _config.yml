@@ -10,7 +10,7 @@ locale                   : "en-US"
 title                    : "Rizal Maulana"
 title_separator          : "-"
 name                     : &name "Rizal Maulana"
-description              : &description "Legal Data Scientist at Legal Analytics - Telkom Indonesia"
+description              : &description "Ex Data Engineer at Legal Analytics - Telkom Indonesia"
 url                      : https://rizalmaulanaa.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "rizalmaulanaa/rizalmaulanaa.github.io"
@@ -82,7 +82,7 @@ analytics:
 author:
   name             : "Rizal Maulana"
   avatar           : "profile.png"
-  bio              : "Legal Data Scientist at Legal Analytics - Telkom Indonesia"
+  bio              : "Ex Data Engineer at Legal Analytics - Telkom Indonesia"
   location         : "Bandung, Indonesia"
   employer         :
   pubmed           :
