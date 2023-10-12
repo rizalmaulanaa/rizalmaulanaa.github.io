@@ -16,6 +16,8 @@ Education
 
 Experience
 ======
+* Data Engineer - PT. Sharing Vision (BRI onsite), March 2023 - Present
+  * Create/Enhancement ETL and Report using SSIS and SSRS
 * Data Engineer - Legal Analytics, Telkom Indonesia, Sep 2022 - Jan 2023
   * Crawling Indonesian news from various sites.
   * Letter extraction, ID card extraction, and TOR extraction.
