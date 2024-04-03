@@ -16,7 +16,10 @@ Education
 
 Work Experience
 ======
-* Data Engineer - PT. Sharing Vision (BRI onsite), March 2023 - Present
+* AI Engineer - PT. Prima Data Semesta (PLN Icon Plus onsite), March 2024 - Present
+  * Create a deep learning model 
+  
+* Data Engineer - PT. Sharing Vision (BRI onsite), March 2023 - March 2024
   * Create/Enhancement ETL and Report using SSIS and SSRS
 
 * Data Engineer - Legal Analytics, Telkom Indonesia, Sep 2022 - Jan 2023

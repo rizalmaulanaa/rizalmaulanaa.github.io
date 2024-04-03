@@ -10,7 +10,7 @@ locale                   : "en-US"
 title                    : "Rizal Maulana"
 title_separator          : "-"
 name                     : &name "Rizal Maulana"
-description              : &description "Data Engineer at PT. Sharing Vision Indonesia"
+description              : &description "AI Engineer at PLN Icon Plus"
 url                      : https://rizalmaulanaa.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "rizalmaulanaa/rizalmaulanaa.github.io"
@@ -82,7 +82,7 @@ analytics:
 author:
   name             : "Rizal Maulana"
   avatar           : "profile.png"
-  bio              : "Data Engineer at PT. Sharing Vision Indonesia"
+  bio              : "AI Engineer at PLN Icon Plus"
   location         : "Bandung, Indonesia"
   employer         :
   pubmed           :
