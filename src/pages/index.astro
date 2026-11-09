@@ -1,0 +1,175 @@
+---
+import Base from "../layouts/Base.astro";
+import {
+  DECK,
+  pad,
+  formatMonth,
+  getProfile,
+  getExperience,
+  getProjects,
+  getPublications,
+  getTalks,
+  getTeaching,
+} from "../lib/site";
+
+const profile = (await getProfile()).data;
+const work = await getExperience("work");
+const projects = await getProjects();
+const publications = await getPublications();
+const talks = await getTalks();
+const teaching = await getTeaching();
+
+const current = work.find((w) => w.data.end === "present") ?? work[0];
+const firstYear = Math.min(...work.map((w) => Number(w.data.start.slice(0, 4))));
+const featured = projects.filter((p) => p.data.featured).slice(0, 4);
+const shownProjects = featured.length ? featured : projects.slice(0, 4);
+const email = profile.links.find((l) => l.url.startsWith("mailto:"));
+
+const stats = [
+  { value: projects.length, label: "Projects", color: "lime" },
+  { value: publications.length, label: "Publications", color: "orange" },
+  { value: work.length, label: "Roles held", color: "sky" },
+  { value: firstYear, label: "Building since", color: "pink" },
+];
+
+const card = (slug: string) => {
+  const i = DECK.findIndex((d) => d.slug === slug);
+  return { ...DECK[i], number: pad(i + 1), i };
+};
+---
+
+<Base>
+  <div class="wrap">
+    <section class="hero" aria-label="Introduction">
+      <div class="card hero-main c-yellow">
+        <span class="label">Hello, I'm</span>
+        <h1>{profile.name.split(" ")[0]}<br /><span>{profile.name.split(" ").slice(1).join(" ")}</span></h1>
+        <p class="hero-role">{profile.role} @ {profile.company} · {profile.location}</p>
+        <p class="hero-tagline">{profile.tagline}</p>
+        <div class="hero-actions">
+          <a class="btn dark c-lime" href="/projects/">See my work <span aria-hidden="true">→</span></a>
+          <a class="btn" href="/about/">More about me</a>
+          <a class="btn c-pink" href={profile.cv} download>Download CV ↓</a>
+        </div>
+      </div>
+      <div class="card hero-photo c-pink">
+        <figure class="photo-frame">
+          <img src={profile.photo} alt={`Portrait of ${profile.name}`} width="408" height="510" />
+          <figcaption>{profile.name.toLowerCase().replace(" ", "_")}.png</figcaption>
+          <span class="sticker" style="top:-18px; left:-22px; --c: var(--lime); --tilt:-10deg">Open to chat</span>
+        </figure>
+      </div>
+    </section>
+  </div>
+
+  <div class="marquee-clip" aria-hidden="true">
+    <div class="marquee">
+      <div class="marquee-track">
+        {[0, 1].map(() => [...profile.marquee, ...profile.marquee].map((m) => <span>{m}</span>))}
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <ul class="stats" aria-label="At a glance">
+      {
+        stats.map((s) => (
+          <li class={`card stat c-${s.color}`}>
+            <strong>{s.value}</strong>
+            <span>{s.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="deck-head" id="deck">
+      <h2>The Deck</h2>
+      <p>{DECK.length} cards · pick one to open it →</p>
+    </div>
+
+    <div class="deck">
+      {/* 01 About */}
+      {(() => { const c = card("about"); return (
+        <a class={`card pressable deck-card deal c-${c.color}`} href={`/${c.slug}/`} style={`--i:${c.i}; --deal-tilt:-3deg`}>
+          <div class="deck-card-top"><span class="deck-num">{c.number}</span><span class="label">Profile</span></div>
+          <h3>{c.title}</h3>
+          <p><img class="mini-photo" src={profile.photo} alt="" width="84" height="84" />{profile.summary}</p>
+          <ul class="chips">{profile.interests.map((t) => <li class="chip">{t}</li>)}</ul>
+          <span class="open">Open card <span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+      ); })()}
+
+      {/* 02 Experience */}
+      {(() => { const c = card("experience"); return (
+        <a class={`card pressable deck-card deal c-${c.color}`} href={`/${c.slug}/`} style={`--i:${c.i}`}>
+          <div class="deck-card-top"><span class="deck-num">{c.number}</span><span class="label">Now: {current.data.role}</span></div>
+          <h3>{c.title}</h3>
+          <ul class="deck-list">
+            {work.slice(0, 4).map((w) => (
+              <li><span>{w.data.role}<em>{w.data.org.split(" — ").at(-1)?.replace(" (onsite)", "")}</em></span><small>{w.data.start.slice(0, 4)}</small></li>
+            ))}
+          </ul>
+          <span class="open">Open card <span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+      ); })()}
+
+      {/* 03 Projects */}
+      {(() => { const c = card("projects"); return (
+        <a class={`card pressable deck-card deal c-${c.color}`} href={`/${c.slug}/`} style={`--i:${c.i}; --deal-tilt:-2deg`}>
+          <div class="deck-card-top"><span class="deck-num">{c.number}</span><span class="label">{projects.length} projects</span></div>
+          <h3>{c.title}</h3>
+          <ul class="deck-list">
+            {shownProjects.map((p) => <li><span>{p.data.title}</span>{p.data.year && <small>{p.data.year}</small>}</li>)}
+          </ul>
+          <span class="open">Open card <span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+      ); })()}
+
+      {/* 04 Research */}
+      {(() => { const c = card("research"); return (
+        <a class={`card pressable deck-card deal c-${c.color}`} href={`/${c.slug}/`} style={`--i:${c.i}`}>
+          <div class="deck-card-top"><span class="deck-num">{c.number}</span><span class="label">{publications.length} papers</span></div>
+          <h3>{c.title}</h3>
+          <ul class="deck-list">
+            {publications.map((p) => <li><span>{p.data.summary}</span><small>{p.data.venue}</small></li>)}
+          </ul>
+          <span class="open">Open card <span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+      ); })()}
+
+      {/* 05 Teaching & Talks */}
+      {(() => { const c = card("teaching"); return (
+        <a class={`card pressable deck-card deal c-${c.color}`} href={`/${c.slug}/`} style={`--i:${c.i}; --deal-tilt:-4deg`}>
+          <div class="deck-card-top"><span class="deck-num">{c.number}</span></div>
+          <h3>{c.title}</h3>
+          <ul class="deck-list">
+            {teaching.map((t) => <li><span>{t.data.title}</span><small>{t.data.date.getUTCFullYear()}</small></li>)}
+            {talks.map((t) => <li><span>{t.data.type}: {t.data.venue}</span><small>{t.data.date.getUTCFullYear()}</small></li>)}
+          </ul>
+          <span class="open">Open card <span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+      ); })()}
+
+      {/* 06 Skills */}
+      {(() => { const c = card("skills"); return (
+        <a class={`card pressable deck-card deal c-${c.color}`} href={`/${c.slug}/`} style={`--i:${c.i}`}>
+          <div class="deck-card-top"><span class="deck-num">{c.number}</span></div>
+          <h3>{c.title}</h3>
+          <ul class="chips">{profile.skills.flatMap((g) => g.items).slice(0, 10).map((s) => <li class="chip">{s}</li>)}</ul>
+          <span class="open">Open card <span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+      ); })()}
+
+      {/* 07 Contact */}
+      {(() => { const c = card("contact"); return (
+        <a class={`card pressable deck-card deal c-${c.color}`} href={`/${c.slug}/`} style={`--i:${c.i}; --deal-tilt:3deg`}>
+          <div class="deck-card-top"><span class="deck-num">{c.number}</span></div>
+          <h3>{c.title}</h3>
+          <p>{c.blurb}</p>
+          {email && <p><strong>{email.value}</strong></p>}
+          <span class="open">Open card <span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+      ); })()}
+    </div>
+  </div>
+</Base>

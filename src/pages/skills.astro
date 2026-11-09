@@ -1,0 +1,43 @@
+---
+import Base from "../layouts/Base.astro";
+import SlideHead from "../components/SlideHead.astro";
+import DeckNav from "../components/DeckNav.astro";
+import { getProfile, type Color } from "../lib/site";
+
+const profile = (await getProfile()).data;
+const colors: Color[] = ["lime", "sky", "pink", "orange", "lilac", "mint", "yellow"];
+---
+
+<Base title="Skills" section="skills">
+  <SlideHead section="skills" title="Skills" lead="The languages, frameworks, and tools I use day to day." />
+
+  <div class="wrap">
+    <div class="grid-2 section">
+      {
+        profile.skills.map((g, i) => (
+          <section class="card pad skill-group">
+            <h2>{g.group}</h2>
+            <ul class="chips">{g.items.map((s) => <li class={`chip c-${colors[i % colors.length]}`}>{s}</li>)}</ul>
+          </section>
+        ))
+      }
+    </div>
+
+    <div class="grid-3 section">
+      <section class="card pad skill-group c-lilac">
+        <h2>Interests</h2>
+        <ul class="chips">{profile.interests.map((s) => <li class="chip">{s}</li>)}</ul>
+      </section>
+      <section class="card pad skill-group c-yellow">
+        <h2>Languages</h2>
+        <ul class="chips">{profile.languages.map((s) => <li class="chip">{s}</li>)}</ul>
+      </section>
+      <section class="card pad skill-group c-mint">
+        <h2>Soft skills</h2>
+        <ul class="chips">{profile.softSkills.map((s) => <li class="chip">{s}</li>)}</ul>
+      </section>
+    </div>
+  </div>
+
+  <DeckNav section="skills" />
+</Base>

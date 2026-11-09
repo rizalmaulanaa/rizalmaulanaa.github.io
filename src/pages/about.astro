@@ -1,0 +1,65 @@
+---
+import { render } from "astro:content";
+import Base from "../layouts/Base.astro";
+import SlideHead from "../components/SlideHead.astro";
+import DeckNav from "../components/DeckNav.astro";
+import { getProfile, getExperience } from "../lib/site";
+
+const entry = await getProfile();
+const profile = entry.data;
+const { Content } = await render(entry);
+const current = (await getExperience("work")).find((w) => w.data.end === "present");
+---
+
+<Base title="About" section="about" description={profile.summary}>
+  <SlideHead section="about" title="About me" lead={profile.summary}>
+    <a class="btn dark" href={profile.cv} download>Download CV ↓</a>
+    <a class="btn" href="/contact/">Get in touch</a>
+  </SlideHead>
+
+  <div class="wrap">
+    <div class="about-grid section">
+      <aside class="about-side">
+        <figure class="photo-frame">
+          <img src={profile.photo} alt={`Portrait of ${profile.name}`} width="408" height="510" />
+          <figcaption>{profile.location}</figcaption>
+        </figure>
+        <div class="card pad c-yellow">
+          <ul class="facts">
+            {current && <li><small>Now</small><strong>{current.data.role}</strong><span>{current.data.org}</span></li>}
+            <li><small>Based in</small><strong>{profile.location}</strong></li>
+            <li><small>Speaks</small><span>{profile.languages.join(" · ")}</span></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div style="display:grid; gap:32px">
+        <div class="card pad">
+          <div class="prose"><Content /></div>
+        </div>
+
+        <div>
+          <h2 class="section-title">Interests</h2>
+          <ul class="chips">{profile.interests.map((t, i) => <li class={`chip c-${["lilac", "sky", "mint", "pink"][i % 4]}`}>{t}</li>)}</ul>
+        </div>
+
+        <div>
+          <h2 class="section-title">Education</h2>
+          <ol class="timeline">
+            {
+              profile.education.map((e, i) => (
+                <li class={`card pad edu ${i === 0 ? "c-lilac" : ""}`}>
+                  <small>{e.period}</small>
+                  <h3>{e.degree}</h3>
+                  <span><strong>{e.school}</strong> · {e.place}</span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <DeckNav section="about" />
+</Base>

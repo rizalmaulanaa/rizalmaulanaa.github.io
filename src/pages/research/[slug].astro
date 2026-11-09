@@ -1,0 +1,82 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import SlideHead from "../../components/SlideHead.astro";
+import DeckNav from "../../components/DeckNav.astro";
+import { getPublications, formatDate } from "../../lib/site";
+
+export async function getStaticPaths() {
+  const pubs = await getPublications();
+  return pubs.map((pub, i) => ({
+    params: { slug: pub.id },
+    props: { pub, prev: pubs[i - 1], next: pubs[i + 1] },
+  }));
+}
+
+const { pub, prev, next } = Astro.props;
+const { Content } = await render(pub);
+const p = pub.data;
+const project = p.project ? await getEntry("projects", p.project) : undefined;
+const isMe = (author: string) => author.startsWith("Maulana, R");
+const toItem = (x: typeof prev, kicker: string) => x && { href: `/research/${x.id}/`, kicker, title: x.data.venue, color: "orange" as const };
+---
+
+<Base title={p.title} section="research" description={p.summary}>
+  <SlideHead section="research" title={p.title} back={{ href: "/research/", label: "All research" }} counter={false}>
+    {p.links[0] && <a class="btn dark" href={p.links[0].url} target="_blank" rel="noopener">{p.links[0].label} ↗</a>}
+  </SlideHead>
+
+  <div class="wrap">
+    <div class="detail-grid">
+      <div style="display:grid; gap:24px">
+        <article class="card pad">
+          <div class="prose"><Content /></div>
+        </article>
+        <section class="card pad">
+          <span class="label">Authors</span>
+          <p class="authors" style="margin-top:14px">
+            {p.authors.map((a, i) => <>{isMe(a) ? <mark>{a}</mark> : a}{i < p.authors.length - 1 && ", "}</>)}
+          </p>
+        </section>
+        <section class="card pad c-yellow">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap">
+            <span class="label">Cite this paper</span>
+            <button class="btn" type="button" data-copy={p.citation}>Copy citation</button>
+          </div>
+          <p class="citation">{p.citation}</p>
+        </section>
+      </div>
+
+      <aside class="detail-side">
+        <div class="card pad c-orange">
+          <ul class="facts">
+            <li><small>Venue</small><strong>{p.venueFull}</strong></li>
+            <li><small>Published</small><strong>{formatDate(p.date)}</strong></li>
+            <li><small>My role</small><strong>{p.authorship}</strong></li>
+          </ul>
+        </div>
+        <ul class="link-list">
+          {p.links.map((l) => <li><a class="btn" href={l.url} target="_blank" rel="noopener">{l.label} <span aria-hidden="true">↗</span></a></li>)}
+          {project && <li><a class="btn c-lime" href={`/projects/${project.id}/`}>See the project <span aria-hidden="true">→</span></a></li>}
+        </ul>
+      </aside>
+    </div>
+  </div>
+
+  <DeckNav home="/research/" prev={toItem(prev, "Previous paper")} next={toItem(next, "Next paper")} />
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((btn) =>
+    btn.addEventListener("click", async () => {
+      const original = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? "");
+        btn.textContent = "Copied ✓";
+      } catch {
+        btn.textContent = "Copy failed";
+      }
+      setTimeout(() => (btn.textContent = original), 1800);
+    }),
+  );
+</script>

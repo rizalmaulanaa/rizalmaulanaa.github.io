@@ -1,0 +1,100 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import SlideHead from "../../components/SlideHead.astro";
+import DeckNav from "../../components/DeckNav.astro";
+import { getProjects, categoryColor } from "../../lib/site";
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, prev: projects[i - 1], next: projects[i + 1] },
+  }));
+}
+
+const { project, prev, next } = Astro.props;
+const { Content } = await render(project);
+const p = project.data;
+const color = categoryColor(p.category);
+const paper = p.paper ? await getEntry("publications", p.paper) : undefined;
+const toItem = (x: typeof prev, kicker: string) =>
+  x && { href: `/projects/${x.id}/`, kicker, title: x.data.title, color: categoryColor(x.data.category) };
+---
+
+<Base title={p.title} section="projects" description={p.summary}>
+  <SlideHead section="projects" title={p.title} lead={p.summary} color={color} back={{ href: "/projects/", label: "All projects" }} counter={false}>
+    {p.links[0] && <a class="btn dark" href={p.links[0].url} target="_blank" rel="noopener">{p.links[0].label} ↗</a>}
+    {p.repos.length > 0 && <a class={`btn ${p.links[0] ? "" : "dark"}`} href="#repos">{p.repos.length} {p.repos.length === 1 ? "repository" : "repositories"} ↓</a>}
+  </SlideHead>
+
+  <div class="wrap">
+    <div class="detail-grid">
+      <div style="display:grid; gap:24px">
+        <article class="card pad">
+          <div class="prose"><Content /></div>
+        </article>
+
+        {
+          p.repos.length > 0 && (
+            <section id="repos" class="card pad">
+              <span class="label">Repositories</span>
+              <ol class="repo-list">
+                {p.repos.map((r) => (
+                  <li class={`repo c-${color}`}>
+                    <div>
+                      <code>{r.name}</code>
+                      <p>{r.role}</p>
+                    </div>
+                    {r.url ? (
+                      <a class="btn" href={r.url} target="_blank" rel="noopener">
+                        {r.private ? "🔒 Private repo" : "GitHub"} <span aria-hidden="true">↗</span>
+                      </a>
+                    ) : (
+                      <span class="chip">Not published</span>
+                    )}
+                  </li>
+                ))}
+              </ol>
+              {p.repos.some((r) => r.private) && (
+                <p class="repo-note">🔒 Private repositories hold client work and aren’t publicly accessible.</p>
+              )}
+            </section>
+          )
+        }
+      </div>
+
+      <aside class="detail-side">
+        <div class="card pad c-yellow">
+          <ul class="facts">
+            <li><small>Category</small><strong>{p.category}</strong></li>
+            {p.status && <li><small>Status</small><strong>{p.status}</strong></li>}
+            {p.year && <li><small>Year</small><strong>{p.year}</strong></li>}
+          </ul>
+        </div>
+        {
+          p.tags.length > 0 && (
+            <div class="card pad">
+              <span class="label">Built with</span>
+              <ul class="chips" style="margin-top:14px">{p.tags.map((t) => <li class={`chip c-${color}`}>{t}</li>)}</ul>
+            </div>
+          )
+        }
+        {
+          (p.links.length > 0 || paper) && (
+            <ul class="link-list">
+              {p.links.map((l) => (
+                <li><a class="btn" href={l.url} target="_blank" rel="noopener">{l.label} <span aria-hidden="true">↗</span></a></li>
+              ))}
+              {paper && (
+                <li><a class={`btn c-orange`} href={`/research/${paper.id}/`}>Read the paper <span aria-hidden="true">→</span></a></li>
+              )}
+            </ul>
+          )
+        }
+      </aside>
+    </div>
+  </div>
+
+  <DeckNav home="/projects/" prev={toItem(prev, "Previous project")} next={toItem(next, "Next project")} />
+</Base>
