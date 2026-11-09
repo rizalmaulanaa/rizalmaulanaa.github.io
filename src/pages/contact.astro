@@ -1,0 +1,46 @@
+---
+import Base from "../layouts/Base.astro";
+import SlideHead from "../components/SlideHead.astro";
+import DeckNav from "../components/DeckNav.astro";
+import { getProfile, type Color } from "../lib/site";
+
+const profile = (await getProfile()).data;
+const email = profile.links.find((l) => l.url.startsWith("mailto:"));
+const others = profile.links.filter((l) => l !== email);
+const colors: Color[] = ["sky", "lime", "pink", "orange", "lilac", "mint"];
+---
+
+<Base title="Contact" section="contact">
+  <SlideHead section="contact" title="Let's talk" lead="Questions about a project, a paper, or a role? My inbox is open." />
+
+  <div class="wrap">
+    {
+      email && (
+        <div class="card contact-cta section">
+          <div>
+            <span class="label">Email me</span>
+            <p style="margin-top:12px"><a class="big" href={email.url}>{email.value}</a></p>
+          </div>
+          <a class="btn dark c-pink" href={email.url}>Write an email →</a>
+        </div>
+      )
+    }
+
+    <div class="grid-3 section">
+      {
+        others.map((l, i) => (
+          <a class={`card pressable link-card c-${colors[i % colors.length]}`} href={l.url} rel="me noopener" target="_blank">
+            <small>{l.label}</small>
+            <strong>{l.value} <span class="arrow" aria-hidden="true">↗</span></strong>
+          </a>
+        ))
+      }
+      <a class="card pressable link-card c-yellow" href={profile.cv} download>
+        <small>Curriculum vitae</small>
+        <strong>Download CV (PDF) <span class="arrow" aria-hidden="true">↓</span></strong>
+      </a>
+    </div>
+  </div>
+
+  <DeckNav section="contact" />
+</Base>

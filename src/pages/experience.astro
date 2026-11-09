@@ -1,0 +1,73 @@
+---
+import { render } from "astro:content";
+import Base from "../layouts/Base.astro";
+import SlideHead from "../components/SlideHead.astro";
+import DeckNav from "../components/DeckNav.astro";
+import { getProfile, getExperience, formatMonth } from "../lib/site";
+
+const profile = (await getProfile()).data;
+const load = async (type: "work" | "organization") =>
+  Promise.all((await getExperience(type)).map(async (e) => ({ ...e.data, Content: (await render(e)).Content })));
+const work = await load("work");
+const orgs = await load("organization");
+---
+
+<Base title="Experience" section="experience">
+  <SlideHead
+    section="experience"
+    title="Experience"
+    lead="From data engineering at BRI and Telkom, to shipping production AI at PLN Icon Plus, to designing enterprise AI architectures today — plus the teaching and campus work along the way."
+  >
+    <a class="btn dark" href={profile.cv} download>Download full CV ↓</a>
+  </SlideHead>
+
+  <div class="wrap">
+    <section class="section">
+      <h2 class="section-title">Work</h2>
+      <ol class="timeline">
+        {
+          work.map((w) => (
+            <li class={`card job ${w.end === "present" ? "c-sky" : ""}`}>
+              {w.end === "present" && <span class="sticker">Current</span>}
+              <div class="job-when">
+                <span class="chip">{w.start.slice(0, 4)}</span>
+                <div>{formatMonth(w.start)} – {formatMonth(w.end)}</div>
+              </div>
+              <div>
+                <h3>{w.role}</h3>
+                <p class="org">{w.org}</p>
+                <w.Content />
+                {w.tags.length > 0 && <ul class="chips">{w.tags.map((t) => <li class="chip">{t}</li>)}</ul>}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    {
+      orgs.length > 0 && (
+        <section class="section">
+          <h2 class="section-title">Organizations</h2>
+          <ol class="timeline">
+            {orgs.map((o) => (
+              <li class="card job">
+                <div class="job-when">
+                  <span class="chip c-mint">{o.start.slice(0, 4)}</span>
+                  <div>{formatMonth(o.start)} – {formatMonth(o.end)}</div>
+                </div>
+                <div>
+                  <h3>{o.role}</h3>
+                  <p class="org">{o.org}</p>
+                  <o.Content />
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+  </div>
+
+  <DeckNav section="experience" />
+</Base>

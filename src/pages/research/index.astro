@@ -1,0 +1,49 @@
+---
+import Base from "../../layouts/Base.astro";
+import SlideHead from "../../components/SlideHead.astro";
+import DeckNav from "../../components/DeckNav.astro";
+import { getProfile, getPublications } from "../../lib/site";
+
+const profile = (await getProfile()).data;
+const publications = await getPublications();
+const scholar = profile.links.find((l) => l.label === "Google Scholar");
+const researchgate = profile.links.find((l) => l.label === "ResearchGate");
+---
+
+<Base title="Research" section="research">
+  <SlideHead
+    section="research"
+    title="Research"
+    lead="My graduate research was on biomedical image analysis — making deep learning segment white matter hyperintensities in brain MRI reliably, and predicting how they evolve."
+  >
+    {scholar && <a class="btn dark" href={scholar.url} target="_blank" rel="noopener">Google Scholar ↗</a>}
+    {researchgate && <a class="btn" href={researchgate.url} target="_blank" rel="noopener">ResearchGate ↗</a>}
+  </SlideHead>
+
+  <div class="wrap">
+    <section class="section">
+      <h2 class="section-title">Publications</h2>
+      <ol class="timeline">
+        {
+          publications.map((pub, i) => (
+            <li style="display:grid">
+              <a class={`card pressable pub ${i % 2 === 0 ? "c-orange" : "c-white"}`} href={`/research/${pub.id}/`}>
+                <div class="pub-venue">
+                  <strong>{pub.data.venue}</strong>
+                  <span><span class="chip">{pub.data.authorship}</span></span>
+                </div>
+                <div>
+                  <h3>{pub.data.title}</h3>
+                  <p>{pub.data.summary}</p>
+                  <p class="open">Read more <span class="arrow" aria-hidden="true">→</span></p>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+  </div>
+
+  <DeckNav section="research" />
+</Base>

@@ -1,0 +1,74 @@
+---
+import Base from "../../layouts/Base.astro";
+import SlideHead from "../../components/SlideHead.astro";
+import DeckNav from "../../components/DeckNav.astro";
+import { getProjects, categoryColor } from "../../lib/site";
+
+const projects = await getProjects();
+const categories = [...new Set(projects.map((p) => p.data.category))];
+---
+
+<Base title="Projects" section="projects">
+  <SlideHead
+    section="projects"
+    title="Projects"
+    lead="AI agents, CCTV safety analytics, and data platforms built for PLN — plus speech AI, medical imaging, segmentation research, and the templates I use to ship faster. Pick a card to see the details."
+  >
+    <a class="btn dark" href="https://github.com/rizalmaulanaa" target="_blank" rel="noopener">All repos on GitHub ↗</a>
+  </SlideHead>
+
+  <div class="wrap">
+    <div class="filters" role="group" aria-label="Filter by category">
+      <button class="btn" type="button" data-filter="all" aria-pressed="true">All · {projects.length}</button>
+      {
+        categories.map((c) => (
+          <button class={`btn c-${categoryColor(c)}`} type="button" data-filter={c} aria-pressed="false">
+            {c} · {projects.filter((p) => p.data.category === c).length}
+          </button>
+        ))
+      }
+    </div>
+
+    <ul class="project-grid">
+      {
+        projects.map((p, i) => (
+          <li data-category={p.data.category}>
+            <a
+              class={`card pressable project-card deal c-${categoryColor(p.data.category)}`}
+              href={`/projects/${p.id}/`}
+              style={`--i:${i}`}
+            >
+              <div class="project-band">
+                <span>{p.data.category}</span>
+                {(p.data.status || p.data.year) && <span>{[p.data.status, p.data.year].filter(Boolean).join(" · ")}</span>}
+              </div>
+              <div class="project-body">
+                <h3>{p.data.title}</h3>
+                <p>{p.data.summary}</p>
+                <ul class="chips">
+                  {p.data.repos.length > 1 && <li class="chip repo-count">{p.data.repos.length} repos</li>}
+                  {p.data.tags.slice(0, 3).map((t) => <li class="chip">{t}</li>)}
+                </ul>
+                <span style="font-weight:700">View details <span class="arrow" aria-hidden="true">→</span></span>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <DeckNav section="projects" />
+</Base>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+  const items = document.querySelectorAll<HTMLElement>("[data-category]");
+  buttons.forEach((btn) =>
+    btn.addEventListener("click", () => {
+      const filter = btn.dataset.filter;
+      buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+      items.forEach((item) => (item.hidden = filter !== "all" && item.dataset.category !== filter));
+    }),
+  );
+</script>

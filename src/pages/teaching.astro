@@ -1,0 +1,56 @@
+---
+import { render } from "astro:content";
+import Base from "../layouts/Base.astro";
+import SlideHead from "../components/SlideHead.astro";
+import DeckNav from "../components/DeckNav.astro";
+import { getTalks, getTeaching, formatDate } from "../lib/site";
+
+const teaching = await Promise.all(
+  (await getTeaching()).map(async (e) => ({ ...e.data, Content: (await render(e)).Content })),
+);
+const talks = await Promise.all((await getTalks()).map(async (e) => ({ ...e.data, Content: (await render(e)).Content })));
+---
+
+<Base title="Teaching & Talks" section="teaching">
+  <SlideHead
+    section="teaching"
+    title="Teaching & Talks"
+    lead="I like explaining things — as a teaching assistant for machine learning, a web programming mentor, and a speaker on brain MRI segmentation."
+  />
+
+  <div class="wrap">
+    <section class="section">
+      <h2 class="section-title">Teaching</h2>
+      <div class="grid-2">
+        {
+          teaching.map((t, i) => (
+            <article class={`card pad item ${i === 0 ? "c-mint" : ""}`}>
+              <span><span class="label">{t.type}</span></span>
+              <h3>{t.title}</h3>
+              <p class="item-meta">{t.venue}<br />{t.period} · {t.location}</p>
+              <div class="prose"><t.Content /></div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Talks</h2>
+      <div class="grid-2">
+        {
+          talks.map((t) => (
+            <article class="card pad item c-yellow">
+              <span><span class="label">{t.type}</span></span>
+              <h3>{t.title}</h3>
+              <p class="item-meta">{t.venue}<br />{formatDate(t.date)} · {t.location}</p>
+              <div class="prose"><t.Content /></div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  <DeckNav section="teaching" />
+</Base>

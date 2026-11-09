@@ -1,0 +1,52 @@
+---
+import { deckPosition, type Color, type DeckSlug } from "../lib/site";
+
+type Item = { href: string; kicker: string; title: string; color?: Color };
+
+interface Props {
+  /** Flip between deck sections… */
+  section?: DeckSlug;
+  /** …or between explicit items, like neighbouring projects. */
+  prev?: Item;
+  next?: Item;
+  /** Where Esc goes. */
+  home?: string;
+}
+
+const { section, home = "/" } = Astro.props;
+let { prev, next } = Astro.props;
+
+if (section) {
+  const pos = deckPosition(section);
+  prev = pos.prev && { href: `/${pos.prev.slug}/`, kicker: `Previous · ${pos.prev.number}`, title: pos.prev.title, color: pos.prev.color };
+  next = pos.next && { href: `/${pos.next.slug}/`, kicker: `Next · ${pos.next.number}`, title: pos.next.title, color: pos.next.color };
+}
+
+prev ??= { href: home, kicker: "Back to", title: home === "/" ? "The Deck" : "Overview" };
+next ??= { href: home, kicker: "Back to", title: home === "/" ? "The Deck" : "Overview" };
+---
+
+<div class="wrap">
+  <nav class="deck-nav" aria-label="Flip through" data-prev={prev.href} data-next={next.href} data-home={home}>
+    <a class={`card pressable ${prev.color ? `c-${prev.color}` : ""}`} href={prev.href}>
+      <small>← {prev.kicker}</small>
+      <strong>{prev.title}</strong>
+    </a>
+    <a class={`card pressable next ${next.color ? `c-${next.color}` : ""}`} href={next.href}>
+      <small>{next.kicker} →</small>
+      <strong>{next.title}</strong>
+    </a>
+  </nav>
+  <p class="kbd-hint">Flip with <kbd>←</kbd> <kbd>→</kbd> · <kbd>Esc</kbd> to go back</p>
+</div>
+
+<script>
+  document.addEventListener("keydown", (e) => {
+    if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+    if ((e.target as HTMLElement).closest("input, textarea, select, [contenteditable]")) return;
+    const nav = document.querySelector<HTMLElement>(".deck-nav");
+    if (!nav) return;
+    const go = { ArrowLeft: nav.dataset.prev, ArrowRight: nav.dataset.next, Escape: nav.dataset.home }[e.key];
+    if (go) location.href = go;
+  });
+</script>

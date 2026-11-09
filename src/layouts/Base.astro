@@ -1,0 +1,93 @@
+---
+import "../styles/global.css";
+import { DECK, getProfile } from "../lib/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Deck section this page belongs to, for nav highlighting. */
+  section?: string;
+}
+
+const profile = await getProfile();
+const { title, description = profile.data.tagline, section } = Astro.props;
+const fullTitle = title ? `${title} — ${profile.data.name}` : `${profile.data.name} — ${profile.data.role}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(profile.data.photo, Astro.site);
+const github = profile.data.links.find((l) => l.label === "GitHub");
+const linkedin = profile.data.links.find((l) => l.label === "LinkedIn");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/images/site-logo.png" />
+    <meta name="theme-color" content="#fdf6e3" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="topbar">
+      <div class="wrap">
+        <a class="logo" href="/" aria-label={`${profile.data.name} — home`}>
+          <span class="logo-mark" aria-hidden="true">RM</span>
+          <span>{profile.data.name}</span>
+        </a>
+        <button class="btn menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+        <nav aria-label="Main">
+          <ul class="nav" id="site-nav">
+            {
+              DECK.map((d) => (
+                <li>
+                  <a href={`/${d.slug}/`} class={`c-${d.color}`} aria-current={section === d.slug ? "page" : undefined}>
+                    {d.title}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <span>© {new Date().getFullYear()} {profile.data.name} · {profile.data.location}</span>
+        <ul class="footer-links">
+          {github && <li><a href={github.url}>GitHub</a></li>}
+          {linkedin && <li><a href={linkedin.url}>LinkedIn</a></li>}
+          <li><a href={profile.data.cv}>CV (PDF)</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <script>
+      const btn = document.querySelector<HTMLButtonElement>(".menu-btn");
+      const nav = document.getElementById("site-nav");
+      btn?.addEventListener("click", () => {
+        const open = nav?.classList.toggle("open") ?? false;
+        btn.setAttribute("aria-expanded", String(open));
+      });
+    </script>
+  </body>
+</html>

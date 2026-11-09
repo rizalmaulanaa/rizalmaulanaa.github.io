@@ -1,0 +1,31 @@
+---
+import { deckPosition, type Color, type DeckSlug } from "../lib/site";
+
+interface Props {
+  section: DeckSlug;
+  title: string;
+  lead?: string;
+  /** Override the section colour (e.g. a project's category colour). */
+  color?: Color;
+  /** Where the back button goes; defaults to the deck on the home page. */
+  back?: { href: string; label: string };
+  /** Hide the "02 / 07" counter on pages that aren't a deck card themselves. */
+  counter?: boolean;
+}
+
+const { section, title, lead, color, back = { href: "/#deck", label: "Deck" }, counter = true } = Astro.props;
+const pos = deckPosition(section);
+---
+
+<div class="wrap">
+  <header class={`card slide-head c-${color ?? pos.card.color}`}>
+    <div class="slide-meta">
+      <a class="btn" href={back.href}><span aria-hidden="true">←</span> {back.label}</a>
+      {counter && <span class="slide-count" aria-label={`Card ${pos.number} of ${pos.total}`}>{pos.number} / {pos.total}</span>}
+    </div>
+    <h1 class:list={{ long: title.length > 60 }}>{title}</h1>
+    {lead && <p class="lead">{lead}</p>}
+    {Astro.slots.has("default") && <div class="actions"><slot /></div>}
+    <span class="deco" aria-hidden="true">{pos.number}</span>
+  </header>
+</div>
